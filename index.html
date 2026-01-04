@@ -60,7 +60,6 @@
     <div class="hint" id="hint">Tip: buttons work too</div>
     <div class="footer">
       <a class="link" href="#" id="reset">Reset</a>
-      <a class="link" href="#" id="jumpLumiform">Jump to Lumiform steps</a>
     </div>
   </div>
 </div>
@@ -138,46 +137,8 @@
       type: "result",
       title: "Finish",
       desc: "Barrier reinstated; label applied. Form completed.",
-      next: "lumiformStart"
     },
 
-    // Lumiform lane (as per your flow)
-    lumiformStart: {
-      type: "info",
-      title: "Lumiform",
-      desc: "Open Lumiform - Start Fire and Gas Stop MDU Form",
-      next: "lumiform2"
-    },
-    lumiform2: {
-      type: "info",
-      title: "Lumiform photo 1",
-      desc: "Take Photo of the external of the building (With Nameplate if possible) and take photo of the front door with number.",
-      next: "lumiform3"
-    },
-    lumiform3: {
-      type: "info",
-      title: "Lumiform photo 2",
-      desc: "Photo of Fire Stop/Fire Sealant showing Use By Date",
-      next: "lumiform4"
-    },
-    lumiform4: {
-      type: "info",
-      title: "Lumiform photo 3",
-      desc: "Photo of location where drilling will take place, both sides.",
-      next: "lumiform5"
-    },
-    lumiform5: {
-      type: "info",
-      title: "Lumiform photo 4",
-      desc: "Photo showing cable going through the wall, both sides",
-      next: "lumiform6"
-    },
-    lumiform6: {
-      type: "info",
-      title: "Lumiform photo 5",
-      desc: "Photo showing hole sealed with fire sealant or fire stop grommets in place, with label attached, take photo of both sides.",
-      next: null
-    }
   };
 
   let path = [];
@@ -188,7 +149,6 @@
   const elDesc = document.getElementById("desc");
   const elActions = document.getElementById("actions");
   const elReset = document.getElementById("reset");
-  const elJumpLumiform = document.getElementById("jumpLumiform");
   const card = document.getElementById("card");
 
   function render() {
@@ -246,12 +206,6 @@
     render();
   });
 
-  elJumpLumiform.addEventListener("click", (e) => {
-    e.preventDefault();
-    path = [];
-    current = "lumiformStart";
-    render();
-  });
 
   // Swipe handling
   let x0 = null, y0 = null;
