@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Fire & Gas Stop MDU – Swipe Flow</title>
+  <style>
+    :root { --pad: 16px; --radius: 18px; }
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:#0b0f14; color:#e9eef5;
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+    }
+    .wrap{ width:min(720px,100%); padding:var(--pad); }
+    .card{
+      background:#121926; border:1px solid #223047; border-radius:var(--radius);
+      padding:18px; box-shadow:0 10px 30px rgba(0,0,0,.35);
+      user-select:none; touch-action:pan-y;
+    }
+    .top{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; }
+    .badge{ font-size:12px; opacity:.85; padding:6px 10px; border:1px solid #2a3b57; border-radius:999px; }
+    .pill{
+      display:inline-block; padding:6px 10px; border-radius:999px;
+      border:1px solid #2a3b57; background:#0f1624; font-size:12px;
+    }
+    .good{ border-color:#2a8b4c; background:#0f2a1a; }
+    .note{ border-color:#7b66ff; background:#1a1630; }
+    .title{ font-size:20px; font-weight:700; margin:12px 0 10px; }
+    .desc{ font-size:15px; line-height:1.45; opacity:.95; }
+    .actions{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    button{
+      border:1px solid #2a3b57; background:#0f1624; color:#e9eef5;
+      padding:12px 14px; border-radius:14px; font-size:15px; cursor:pointer;
+      flex:1 1 160px;
+    }
+    button.yes{ background:#0f2a1a; border-color:#2a8b4c; }
+    button.no{ background:#2a1515; border-color:#a34a4a; }
+    button.primary{ background:#1a2b45; border-color:#345a8c; }
+    button:active{ transform:scale(.99); }
+    .hint{ margin-top:12px; font-size:13px; opacity:.7; }
+    .footer{ margin-top:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; opacity:.85; font-size:12px; }
+    .link{ color:#9ecbff; text-decoration:none; }
+    .list{ margin:10px 0 0; padding-left:18px; }
+    .list li{ margin:6px 0; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="card" aria-live="polite">
+    <div class="top">
+      <div class="badge" id="badge">Step 1</div>
+      <div class="pill note" id="pill">Swipe right = Yes • Swipe left = No</div>
+    </div>
+
+    <div class="title" id="title"></div>
+    <div class="desc" id="desc"></div>
+
+    <div class="actions" id="actions"></div>
+
+    <div class="hint" id="hint">Tip: buttons work too</div>
+    <div class="footer">
+      <a class="link" href="#" id="reset">Reset</a>
+      <a class="link" href="#" id="jumpLumiform">Jump to Lumiform steps</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // EXACTLY your completed flow (no added branches)
+  // Swipe Right = YES, Swipe Left = NO
+
+  const STEPS = {
+    fireBarrier: {
+      type: "question",
+      title: "Fire barrier?",
+      desc: "Assume YES unless proven otherwise.",
+      yes: "predrill",
+      no: "predrill"
+    },
+    predrill: {
+      type: "info",
+      title: "Pre-drill requirement",
+      desc: "Consult Landlord/Managing Agent/Building Owner and obtain approval where required. Use handover pack / building method if provided. If uncertain: stop and escalate to FM/AFM.",
+      next: "grommetSuitable"
+    },
+    grommetSuitable: {
+      type: "question",
+      title: "Hole suitable for firestop grommet?",
+      desc: "14mm SKU 10014507 / 25mm SKU 10014072",
+      yes: "accessBothSides",
+      no: "sealantMethod"
+    },
+    accessBothSides: {
+      type: "question",
+      title: "Access to both sides?",
+      desc: "",
+      yes: "installGrommets",
+      no: "sealantMethod"
+    },
+    installGrommets: {
+      type: "result",
+      title: "Install firestop split grommet BOTH sides",
+      desc: "No sealant required if correctly installed.",
+      next: "label"
+    },
+    sealantMethod: {
+      type: "info",
+      title: "Use certified fire-rated sealant/mastic method",
+      desc: "Mixed method acceptable when needed e.g: Inside = grommet (internal seal) / Outside = Firebreak 33 (external seal).",
+      next: "externalInternal"
+    },
+    externalInternal: {
+      type: "question",
+      title: "External-to-internal entry?",
+      desc: "",
+      yes: "firebreak33",
+      no: "firebreak66"
+    },
+    firebreak33: {
+      type: "result",
+      title: "Firebreak 33",
+      desc: "External-to-internal SKU 64600610",
+      next: "label"
+    },
+    firebreak66: {
+      type: "result",
+      title: "Firebreak 66",
+      desc: "Internal-to-internal SKU 10013050",
+      next: "label"
+    },
+    label: {
+      type: "result",
+      title: "Label firestopping",
+      desc: "Typically internal non-living side. SKU 10014092",
+      next: "finish"
+    },
+    finish: {
+      type: "result",
+      title: "Finish",
+      desc: "Barrier reinstated; label applied. Form completed.",
+      next: "lumiformStart"
+    },
+
+    // Lumiform lane (as per your flow)
+    lumiformStart: {
+      type: "info",
+      title: "Lumiform",
+      desc: "Open Lumiform - Start Fire and Gas Stop MDU Form",
+      next: "lumiform2"
+    },
+    lumiform2: {
+      type: "info",
+      title: "Lumiform photo 1",
+      desc: "Take Photo of the external of the building (With Nameplate if possible) and take photo of the front door with number.",
+      next: "lumiform3"
+    },
+    lumiform3: {
+      type: "info",
+      title: "Lumiform photo 2",
+      desc: "Photo of Fire Stop/Fire Sealant showing Use By Date",
+      next: "lumiform4"
+    },
+    lumiform4: {
+      type: "info",
+      title: "Lumiform photo 3",
+      desc: "Photo of location where drilling will take place, both sides.",
+      next: "lumiform5"
+    },
+    lumiform5: {
+      type: "info",
+      title: "Lumiform photo 4",
+      desc: "Photo showing cable going through the wall, both sides",
+      next: "lumiform6"
+    },
+    lumiform6: {
+      type: "info",
+      title: "Lumiform photo 5",
+      desc: "Photo showing hole sealed with fire sealant or fire stop grommets in place, with label attached, take photo of both sides.",
+      next: null
+    }
+  };
+
+  let path = [];
+  let current = "fireBarrier";
+
+  const elBadge = document.getElementById("badge");
+  const elTitle = document.getElementById("title");
+  const elDesc = document.getElementById("desc");
+  const elActions = document.getElementById("actions");
+  const elReset = document.getElementById("reset");
+  const elJumpLumiform = document.getElementById("jumpLumiform");
+  const card = document.getElementById("card");
+
+  function render() {
+    const step = STEPS[current];
+    elBadge.textContent = `Step ${path.length + 1}`;
+    elTitle.textContent = step.title;
+    elDesc.textContent = step.desc || "";
+    elActions.innerHTML = "";
+
+    if (step.type === "question") {
+      const btnNo = document.createElement("button");
+      btnNo.className = "no";
+      btnNo.textContent = "No";
+      btnNo.onclick = () => go("no");
+      const btnYes = document.createElement("button");
+      btnYes.className = "yes";
+      btnYes.textContent = "Yes";
+      btnYes.onclick = () => go("yes");
+      elActions.append(btnNo, btnYes);
+    } else {
+      const btnNext = document.createElement("button");
+      btnNext.className = "primary";
+      btnNext.textContent = step.next ? "Next" : "Done";
+      btnNext.onclick = () => step.next ? go("next") : null;
+      const btnBack = document.createElement("button");
+      btnBack.textContent = "Back";
+      btnBack.onclick = back;
+      elActions.append(btnBack, btnNext);
+    }
+  }
+
+  function go(answer) {
+    const step = STEPS[current];
+    path.push(current);
+
+    if (step.type === "question") {
+      current = (answer === "yes") ? step.yes : step.no;
+    } else {
+      current = step.next;
+    }
+    if (!current) current = path[path.length - 1]; // safety
+    render();
+  }
+
+  function back() {
+    if (path.length === 0) return;
+    current = path.pop();
+    render();
+  }
+
+  elReset.addEventListener("click", (e) => {
+    e.preventDefault();
+    path = [];
+    current = "fireBarrier";
+    render();
+  });
+
+  elJumpLumiform.addEventListener("click", (e) => {
+    e.preventDefault();
+    path = [];
+    current = "lumiformStart";
+    render();
+  });
+
+  // Swipe handling
+  let x0 = null, y0 = null;
+  card.addEventListener("touchstart", (e) => {
+    const t = e.changedTouches[0];
+    x0 = t.clientX; y0 = t.clientY;
+  }, {passive:true});
+
+  card.addEventListener("touchend", (e) => {
+    if (x0 === null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0;
+    const dy = t.clientY - y0;
+    x0 = y0 = null;
+
+    // ignore vertical scroll
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    if (Math.abs(dx) < 60) return;
+
+    const step = STEPS[current];
+    if (step.type !== "question") return;
+
+    if (dx > 0) go("yes");
+    else go("no");
+  }, {passive:true});
+
+  render();
+</script>
+</body>
+</html>
