@@ -5,52 +5,94 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Fire & Gas Stop MDU – Swipe Flow</title>
   <style>
-    :root { --pad: 16px; --radius: 18px; }
-    body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:#0b0f14; color:#e9eef5;
-      min-height:100vh; display:flex; align-items:center; justify-content:center;
-    }
-    .wrap{ width:min(720px,100%); padding:var(--pad); }
-    .card{
-      background:#121926; border:1px solid #223047; border-radius:var(--radius);
-      padding:18px; box-shadow:0 10px 30px rgba(0,0,0,.35);
-      user-select:none; touch-action:pan-y;
-    }
-    .top{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; }
-    .badge{ font-size:12px; opacity:.85; padding:6px 10px; border:1px solid #2a3b57; border-radius:999px; }
-    .pill{
-      display:inline-block; padding:6px 10px; border-radius:999px;
-      border:1px solid #2a3b57; background:#0f1624; font-size:12px;
-    }
-    .good{ border-color:#2a8b4c; background:#0f2a1a; }
-    .note{ border-color:#7b66ff; background:#1a1630; }
-    .title{ font-size:20px; font-weight:700; margin:12px 0 10px; }
-    .desc{ font-size:15px; line-height:1.45; opacity:.95; }
-    .actions{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
-    button{
-      border:1px solid #2a3b57; background:#0f1624; color:#e9eef5;
-      padding:12px 14px; border-radius:14px; font-size:15px; cursor:pointer;
-      flex:1 1 160px;
-    }
-    button.yes{ background:#0f2a1a; border-color:#2a8b4c; }
-    button.no{ background:#2a1515; border-color:#a34a4a; }
-    button.primary{ background:#1a2b45; border-color:#345a8c; }
-    button:active{ transform:scale(.99); }
-    .hint{ margin-top:12px; font-size:13px; opacity:.7; }
-    .footer{ margin-top:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; opacity:.85; font-size:12px; }
-    .link{ color:#9ecbff; text-decoration:none; }
-    .list{ margin:10px 0 0; padding-left:18px; }
-    .list li{ margin:6px 0; }
+    :root{
+  --pad: 16px;
+  --radius: 18px;
+
+  --bg: #07121f;
+  --card: #ffffff;
+  --text: #0b1220;
+  --muted: #4b5563;
+
+  --o2blue: #005EB8;
+  --o2blueDark: #004A93;
+  --virginRed: #E4002B;
+  --virginRedDark: #B80022;
+
+  --stroke: #d6dde8;
+  --shadow: rgba(0,0,0,.22);
+}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(0,94,184,.22), transparent 60%),
+              radial-gradient(900px 500px at 90% 20%, rgba(228,0,43,.18), transparent 55%),
+              var(--bg);
+  color:#e9eef5;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card{
+  background: var(--card);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding:18px;
+  box-shadow: 0 14px 40px var(--shadow);
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  border:1px dashed rgba(0,94,184,.5);
+  object-fit:contain;
+}
+
+.logo[src=""]{ display:none; }
+
+.brand{ display:flex; gap:12px; align-items:center; }
+.brandName{ font-weight:900; color:var(--text); }
+.brandSub{ font-size:12px; color:var(--muted); }
+
+button.yes{
+  background: var(--o2blue);
+  color:#fff;
+}
+
+button.no{
+  background: var(--virginRed);
+  color:#fff;
+}
+
+button.primary{
+  background: var(--o2blue);
+  color:#fff;
+}
+
   </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card" id="card" aria-live="polite">
-    <div class="top">
-      <div class="badge" id="badge">Step 1</div>
-      <div class="pill note" id="pill">Swipe right = Yes • Swipe left = No</div>
+<div class="top">
+  <div class="brand">
+    <!-- Logo placeholder -->
+    <img class="logo" src="" alt="Virgin Media O2" />
+    <div>
+      <div class="brandName">Virgin Media O2</div>
+      <div class="brandSub">Fire &amp; Gas Stop MDU – Swipe Flow</div>
     </div>
+  </div>
+
+  <div class="rightTop">
+    <div class="badge" id="badge">Step 1</div>
+    <div class="pill note" id="pill">Swipe right = Yes • Swipe left = No</div>
+  </div>
+</div>
 
     <div class="title" id="title"></div>
     <div class="desc" id="desc"></div>
