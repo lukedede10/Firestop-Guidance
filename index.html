@@ -126,6 +126,84 @@ body{
   color: var(--text);
   font-
 
+/* ===== FORCE READABILITY + BRAND COLOURS (override) ===== */
+
+/* Force all text inside the card to be dark and readable */
+.card, .card * {
+  color: #0b1220 !important;
+}
+
+/* Keep the page background light text (outside the card) */
+body {
+  color: #e9eef5 !important;
+}
+
+/* Make sure title/description are clearly readable */
+#title {
+  font-size: 30px !important;
+  font-weight: 950 !important;
+  line-height: 1.15 !important;
+  margin-top: 18px !important;
+  color: #0b1220 !important;
+}
+
+#desc {
+  font-size: 20px !important;
+  line-height: 1.45 !important;
+  color: #0b1220 !important;
+}
+
+/* Make hint visible but still muted */
+#hint {
+  color: #334155 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+/* Force button sizing */
+#actions button {
+  font-size: 20px !important;
+  padding: 18px 18px !important;
+  border-radius: 18px !important;
+  font-weight: 900 !important;
+  border: 0 !important;
+}
+
+/* Force VM/O2 colours */
+#actions button.yes,
+button.yes {
+  background: #005EB8 !important;  /* O2 blue */
+  color: #ffffff !important;
+}
+
+#actions button.no,
+button.no {
+  background: #E4002B !important;  /* Virgin red */
+  color: #ffffff !important;
+}
+
+#actions button.primary,
+button.primary {
+  background: #005EB8 !important;
+  color: #ffffff !important;
+}
+
+/* Make the pills/badge look clean on white */
+.badge, .pill {
+  background: #f5f7fb !important;
+  border: 1px solid #d6dde8 !important;
+}
+
+.pill.note {
+  background: rgba(0,94,184,.08) !important;
+  border-color: rgba(0,94,184,.35) !important;
+}
+
+/* Make Reset link O2 blue */
+.link, #reset {
+  color: #005EB8 !important;
+  font-weight: 900 !important;
+}
 
   </style>
 </head>
